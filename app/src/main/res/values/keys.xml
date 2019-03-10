@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Add your API keys here -->
+    <string name="api_key"></string>
+    <string name="secret"></string>
+</resources>
