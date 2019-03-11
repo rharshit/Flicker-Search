@@ -1,6 +1,8 @@
 package com.rharshit.flickrsearch.flickr;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutCompat;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -32,6 +34,9 @@ public class FlickrPhotosAdapter extends ArrayAdapter<FlickrPhoto> {
     public View getView(int position, View convertView, ViewGroup parent) {
         FlickrPhoto photo = values.get(position);
         ImageView iv = new ImageView(mContext);
+        iv.setLayoutParams(new LinearLayoutCompat.LayoutParams(200, 200));
+        iv.setForegroundGravity(Gravity.CENTER);
+        iv.setPadding(8, 8, 8,8);
         UrlImageViewHelper.setUrlDrawable(iv, photo.getURL("q"), R.drawable.ic_insert_photo);
         return iv;
     }
