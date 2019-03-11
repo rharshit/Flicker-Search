@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = this;
 
+        new SharedPreferences(this);
+
         etSeatch = findViewById(R.id.et_search);
         bSearch = findViewById(R.id.b_search);
         gvImages = findViewById(R.id.gv_images);
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             private void loadMore() {
-                                
+
                                 long delta = System.currentTimeMillis() - lastRefresh[0];
                                 Log.d(TAG, "onResponse: delta: "+Long.toString(delta));
                                 if (delta <100){

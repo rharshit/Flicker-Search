@@ -1,6 +1,14 @@
 package com.rharshit.flickrsearch.flickr;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.util.Log;
+import com.rharshit.flickrsearch.SharedPreferences;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 import static android.content.ContentValues.TAG;
 
@@ -20,6 +28,7 @@ public class FlickrPhoto {
     public String getURL(){
         String url = "https://farm"+farm+".staticflickr.com/"+server+"/"+id+"_"+secret+".jpg";
         Log.d(TAG, "getURL: "+url);
+        new cacheBitmap().execute(url, id);
         return url;
     }
 
@@ -38,6 +47,35 @@ public class FlickrPhoto {
 //        o	original image, either a jpg, gif or png, depending on source format
         String url = "https://farm"+farm+".staticflickr.com/"+server+"/"+id+"_"+secret+"_"+ext+".jpg";
         Log.d(TAG, "getURL: "+url);
+        new cacheBitmap().execute(url, id);
         return url;
+    }
+
+    private class cacheBitmap extends AsyncTask<String, Void, Boolean>{
+
+        Bitmap image = null;
+        String url;
+        String id;
+        @Override
+        protected Boolean doInBackground(String... urls) {
+            try {
+                url = urls[0];
+                id = urls[1];
+                image = BitmapFactory.decodeStream((InputStream)new URL(url).getContent());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            if(aBoolean){
+                SharedPreferences.setBitmap(id, image);
+                Log.d(TAG, "onPostExecute: "+id);
+            }
+        }
     }
 }

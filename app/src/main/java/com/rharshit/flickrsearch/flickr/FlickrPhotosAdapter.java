@@ -1,7 +1,9 @@
 package com.rharshit.flickrsearch.flickr;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +12,12 @@ import android.widget.ImageView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.rharshit.flickrsearch.R;
+import com.rharshit.flickrsearch.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 public class FlickrPhotosAdapter extends ArrayAdapter<FlickrPhoto> {
 
@@ -42,10 +47,17 @@ public class FlickrPhotosAdapter extends ArrayAdapter<FlickrPhoto> {
         iv.setLayoutParams(new LinearLayoutCompat.LayoutParams(200, 200));
         iv.setForegroundGravity(Gravity.CENTER);
         iv.setPadding(8, 8, 8,8);
-        try{
-            UrlImageViewHelper.setUrlDrawable(iv, photo.getURL("q"), R.drawable.ic_insert_photo);
-        } catch (Exception e){
-            e.printStackTrace();
+        Bitmap image = SharedPreferences.getBitmap(photo.id);
+        if(image != null){
+            iv.setImageBitmap(image);
+            Log.d(TAG, "getView: Loaded from cache");
+        } else {
+            try{
+                UrlImageViewHelper.setUrlDrawable(iv, photo.getURL("q"), R.drawable.ic_insert_photo);
+                Log.d(TAG, "getView: Loaded from URL");
+            } catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return iv;
     }
