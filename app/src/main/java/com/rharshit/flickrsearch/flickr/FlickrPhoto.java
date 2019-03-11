@@ -16,4 +16,16 @@ public class FlickrPhoto {
                 "id: "+id +" secret "+ secret + "server" + server+
                 " farm "+farm+" title "+title);
     }
+
+    public String getURL(){
+        String url = "https://farm"+farm+".staticflickr.com/"+server+"/"+id+"_"+secret+".jpg";
+        Log.d(TAG, "getURL: "+url);
+        return url;
+    }
+
+    public String getURL(String ext){
+        String url = "https://farm"+farm+".staticflickr.com/"+server+"/"+id+"_"+secret+"_"+ext+".jpg";
+        Log.d(TAG, "getURL: "+url);
+        return url;
+    }
 }

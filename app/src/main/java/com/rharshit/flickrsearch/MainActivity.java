@@ -11,6 +11,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.rharshit.flickrsearch.flickr.FlickrPhotosAdapter;
 import com.rharshit.flickrsearch.flickr.FlickrPhotosParse;
 import com.rharshit.flickrsearch.flickr.api.FlickrClient;
 
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         FlickrPhotosParse photos = gson.fromJson(json, FlickrPhotosParse.class);
                         photos.debugInfo();
+
+                        gvImages.setAdapter(new FlickrPhotosAdapter(mContext, 0, photos.getPageResult()));
                     }
 
                     @Override

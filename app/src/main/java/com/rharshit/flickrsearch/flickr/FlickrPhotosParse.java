@@ -14,6 +14,10 @@ public class FlickrPhotosParse {
         Log.d(TAG, "debugInfo: ");
         photos.getPhotos();
     }
+
+    public List<FlickrPhoto> getPageResult() {
+        return photos.getPhoto();
+    }
 }
 
 class FlickrPageResults {
@@ -25,5 +29,9 @@ class FlickrPageResults {
         for(FlickrPhoto p:photo){
             p.getInfo();
         }
+    }
+
+    public List<FlickrPhoto> getPhoto() {
+        return photo;
     }
 }
