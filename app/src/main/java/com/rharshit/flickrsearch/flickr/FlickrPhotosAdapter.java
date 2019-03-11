@@ -42,7 +42,11 @@ public class FlickrPhotosAdapter extends ArrayAdapter<FlickrPhoto> {
         iv.setLayoutParams(new LinearLayoutCompat.LayoutParams(200, 200));
         iv.setForegroundGravity(Gravity.CENTER);
         iv.setPadding(8, 8, 8,8);
-        UrlImageViewHelper.setUrlDrawable(iv, photo.getURL("q"), R.drawable.ic_insert_photo);
+        try{
+            UrlImageViewHelper.setUrlDrawable(iv, photo.getURL("q"), R.drawable.ic_insert_photo);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
         return iv;
     }
 }
