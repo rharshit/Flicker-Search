@@ -11,18 +11,23 @@ import android.widget.ImageView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.rharshit.flickrsearch.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FlickrPhotosAdapter extends ArrayAdapter<FlickrPhoto> {
 
     private Context mContext;
-    private List<FlickrPhoto> values;
+    private ArrayList<FlickrPhoto> values = new ArrayList<FlickrPhoto>();
 
-    public FlickrPhotosAdapter(Context context, int resource, List<FlickrPhoto> objects) {
+    public FlickrPhotosAdapter(Context context, int resource, ArrayList<FlickrPhoto> objects) {
         super(context, resource, objects);
 
         this.values = objects;
         mContext = context;
+    }
+
+    public void addPhotos(ArrayList<FlickrPhoto> objects){
+        values.addAll(objects);
     }
 
     @Override

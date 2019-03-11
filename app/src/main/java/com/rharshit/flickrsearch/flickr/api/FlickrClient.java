@@ -15,5 +15,8 @@ public interface FlickrClient {
 
     @GET("services/rest/?method=flickr.photos.search&format=json")
     Call<String> photosForTagJson(@Query("api_key") String api_key, @Query("tags") String tag);
+
+    @GET("services/rest/?method=flickr.photos.search&format=json")
+    Call<String> photosForTagJson(@Query("api_key") String api_key, @Query("tags") String tag, @Query("page") int page);
 }
 

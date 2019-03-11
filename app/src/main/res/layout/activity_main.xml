@@ -69,17 +69,21 @@
                 android:onClick="changeCols"/>
         </RadioGroup>
     </LinearLayout>
-    <GridView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:foregroundGravity="center"
-        app:layout_constraintTop_toBottomOf="@id/ll_num_cols"
-        android:numColumns="2"
-        android:padding="16dp"
-        android:stretchMode="spacingWidthUniform"
-        android:id="@+id/gv_images">
+        app:layout_constraintTop_toBottomOf="@id/ll_num_cols">
+        <GridView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:foregroundGravity="center"
+            android:numColumns="2"
+            android:padding="16dp"
+            android:stretchMode="spacingWidthUniform"
+            android:id="@+id/gv_images">
+        </GridView>
+    </LinearLayout>
 
-    </GridView>
 
 </android.support.constraint.ConstraintLayout>

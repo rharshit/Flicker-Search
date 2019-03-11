@@ -1,6 +1,8 @@
 package com.rharshit.flickrsearch;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     String TAG = "MainActivity";
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         bSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String tag = etSeatch.getText().toString();
+                final String tag = etSeatch.getText().toString();
 
                 OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
                 builder.readTimeout(10, TimeUnit.SECONDS);
@@ -74,8 +77,11 @@ public class MainActivity extends AppCompatActivity {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
-                FlickrClient client = retrofit.create(FlickrClient.class);
+                final FlickrClient client = retrofit.create(FlickrClient.class);
                 Call<String> call = client.photosForTagJson(api_key, tag);
+
+                final int[] page = {1};
+                final long[] lastRefresh = {System.currentTimeMillis()};
 
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -91,6 +97,53 @@ public class MainActivity extends AppCompatActivity {
                         photos.debugInfo();
 
                         gvImages.setAdapter(new FlickrPhotosAdapter(mContext, 0, photos.getPageResult()));
+                        gvImages.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                            @Override
+                            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                                if(gvImages.getAdapter()!= null && gvImages.getChildCount()>0) {
+                                    if (gvImages.getLastVisiblePosition() ==gvImages.getAdapter().getCount() - 1 &&
+                                            gvImages.getChildAt(gvImages.getChildCount() - 1).getBottom() <= gvImages.getHeight()) {
+                                        Log.d(TAG, "onScrollChange: Load more");
+                                        loadMore();
+                                    }
+                                }
+                            }
+
+                            private void loadMore() {
+                                
+                                long delta = System.currentTimeMillis() - lastRefresh[0];
+                                Log.d(TAG, "onResponse: delta: "+Long.toString(delta));
+                                if (delta <100){
+                                    return;
+                                }
+                                lastRefresh[0] += delta;
+                                Toast.makeText(mContext, "Loading page "+Integer.toString(page[0]), Toast.LENGTH_SHORT).show();
+                                Call<String> call = client.photosForTagJson(api_key, tag, page[0]++);
+                                call.enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        String s = response.body().toString();
+                                        Log.i(TAG, "onResponse: "+s);
+                                        String json = s.replace("jsonFlickrApi(","");
+                                        json = json.substring(0, json.length()-1);
+                                        Log.i(TAG, "onResponse: "+json);
+
+                                        Gson gson = new Gson();
+                                        FlickrPhotosParse photos = gson.fromJson(json, FlickrPhotosParse.class);
+                                        photos.debugInfo();
+
+                                        FlickrPhotosAdapter adapter = ((FlickrPhotosAdapter)gvImages.getAdapter());
+                                        adapter.addPhotos(photos.getPageResult());
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+
+                                    }
+                                });
+                            }
+                        });
                     }
 
                     @Override

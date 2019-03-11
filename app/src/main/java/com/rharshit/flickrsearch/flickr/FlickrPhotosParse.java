@@ -2,6 +2,7 @@ package com.rharshit.flickrsearch.flickr;
 
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.ContentValues.TAG;
@@ -17,7 +18,7 @@ public class FlickrPhotosParse {
         }
     }
 
-    public List<FlickrPhoto> getPageResult() {
+    public ArrayList<FlickrPhoto> getPageResult() {
         return photos!=null?photos.getPhoto():null;
     }
 }
@@ -25,7 +26,7 @@ public class FlickrPhotosParse {
 class FlickrPageResults {
     int page;
     int pages;
-    List<FlickrPhoto> photo;
+    ArrayList<FlickrPhoto> photo;
 
     public void getPhotos(){
         for(FlickrPhoto p:photo){
@@ -33,7 +34,7 @@ class FlickrPageResults {
         }
     }
 
-    public List<FlickrPhoto> getPhoto() {
+    public ArrayList<FlickrPhoto> getPhoto() {
         return photo;
     }
 }
