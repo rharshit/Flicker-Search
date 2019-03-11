@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         bSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String tag = etSeatch.getText().toString();
+
                 OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
                 builder.readTimeout(10, TimeUnit.SECONDS);
                 builder.connectTimeout(5, TimeUnit.SECONDS);
@@ -71,9 +74,8 @@ public class MainActivity extends AppCompatActivity {
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
 
-
                 FlickrClient client = retrofit.create(FlickrClient.class);
-                Call<String> call = client.photosForTagJson(api_key, "Nature");
+                Call<String> call = client.photosForTagJson(api_key, tag);
 
                 call.enqueue(new Callback<String>() {
                     @Override
@@ -100,5 +102,21 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
+
+        ((RadioButton) findViewById(R.id.rb_num_col_2)).setChecked(true);
+    }
+
+    public void changeCols(View v){
+        switch (v.getId()){
+            case R.id.rb_num_col_2:
+                gvImages.setNumColumns(2);
+                break;
+            case R.id.rb_num_col_3:
+                gvImages.setNumColumns(3);
+                break;
+            case R.id.rb_num_col_4:
+                gvImages.setNumColumns(4);
+                break;
+        }
     }
 }

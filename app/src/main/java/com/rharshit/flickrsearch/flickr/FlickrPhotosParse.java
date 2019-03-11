@@ -12,11 +12,13 @@ public class FlickrPhotosParse {
 
     public void debugInfo() {
         Log.d(TAG, "debugInfo: ");
-        photos.getPhotos();
+        if(photos!=null){
+            photos.getPhotos();
+        }
     }
 
     public List<FlickrPhoto> getPageResult() {
-        return photos.getPhoto();
+        return photos!=null?photos.getPhoto():null;
     }
 }
 

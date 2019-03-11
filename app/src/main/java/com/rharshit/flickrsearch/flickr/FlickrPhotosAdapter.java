@@ -24,6 +24,11 @@ public class FlickrPhotosAdapter extends ArrayAdapter<FlickrPhoto> {
     }
 
     @Override
+    public int getCount() {
+        return values!=null?values.size():0;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         FlickrPhoto photo = values.get(position);
         ImageView iv = new ImageView(mContext);
